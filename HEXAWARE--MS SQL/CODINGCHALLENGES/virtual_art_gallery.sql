@@ -1,15 +1,7 @@
 
--- ----------------------------------------
--- Virtual Art Gallery SQL Script
--- Includes DDL, DML, and 20 Queries
--- ----------------------------------------
 
--- Drop existing tables if they exist
-DROP TABLE IF EXISTS ExhibitionArtworks;
-DROP TABLE IF EXISTS Exhibitions;
-DROP TABLE IF EXISTS Artworks;
-DROP TABLE IF EXISTS Categories;
-DROP TABLE IF EXISTS Artists;
+-- Virtual Art Gallery SQL Script
+
 
 -- 1. Create the Artists table
 CREATE TABLE Artists (
