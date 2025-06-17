@@ -1,15 +1,5 @@
 
--- ----------------------------------------
 -- Virtual Art Gallery SQL Script
--- Includes DDL, DML, and 20 Queries
--- ----------------------------------------
-
--- Drop existing tables if they exist
-DROP TABLE IF EXISTS ExhibitionArtworks;
-DROP TABLE IF EXISTS Exhibitions;
-DROP TABLE IF EXISTS Artworks;
-DROP TABLE IF EXISTS Categories;
-DROP TABLE IF EXISTS Artists;
 
 -- 1. Create the Artists table
 CREATE TABLE Artists (
@@ -99,6 +89,7 @@ GROUP BY A.Name
 ORDER BY ArtworkCount DESC;
 
 -- 2. Artworks by Spanish and Dutch artists
+    
 SELECT Ar.Title
 FROM Artworks Ar
 JOIN Artists A ON Ar.ArtistID = A.ArtistID
@@ -106,6 +97,7 @@ WHERE A.Nationality IN ('Spanish', 'Dutch')
 ORDER BY Ar.Year ASC;
 
 -- 3. Artists with artworks in 'Painting' category
+    
 SELECT A.Name, COUNT(*) AS PaintingCount
 FROM Artists A
 JOIN Artworks Ar ON A.ArtistID = Ar.ArtistID
@@ -113,6 +105,7 @@ WHERE Ar.CategoryID = 1
 GROUP BY A.Name;
 
 -- 4. Artworks in 'Modern Art Masterpieces' with artist and category
+    
 SELECT Ar.Title, A.Name AS Artist, C.Name AS Category
 FROM ExhibitionArtworks EA
 JOIN Artworks Ar ON EA.ArtworkID = Ar.ArtworkID
@@ -122,6 +115,7 @@ JOIN Exhibitions E ON EA.ExhibitionID = E.ExhibitionID
 WHERE E.Title = 'Modern Art Masterpieces';
 
 -- 5. Artists with more than two artworks
+    
 SELECT A.Name, COUNT(Ar.ArtworkID) AS ArtworkCount
 FROM Artists A
 JOIN Artworks Ar ON A.ArtistID = Ar.ArtistID
@@ -129,6 +123,7 @@ GROUP BY A.Name
 HAVING COUNT(Ar.ArtworkID) > 2;
 
 -- 6. Artworks in both exhibitions
+    
 SELECT Ar.Title
 FROM ExhibitionArtworks EA1
 JOIN ExhibitionArtworks EA2 ON EA1.ArtworkID = EA2.ArtworkID
@@ -136,12 +131,14 @@ JOIN Artworks Ar ON EA1.ArtworkID = Ar.ArtworkID
 WHERE EA1.ExhibitionID = 1 AND EA2.ExhibitionID = 2;
 
 -- 7. Total artworks in each category
+    
 SELECT C.Name, COUNT(A.ArtworkID) AS TotalArtworks
 FROM Categories C
 LEFT JOIN Artworks A ON C.CategoryID = A.CategoryID
 GROUP BY C.Name;
 
 -- 8. Artists with more than 3 artworks
+    
 SELECT A.Name, COUNT(Ar.ArtworkID) AS ArtworkCount
 FROM Artists A
 JOIN Artworks Ar ON A.ArtistID = Ar.ArtistID
@@ -149,11 +146,13 @@ GROUP BY A.Name
 HAVING COUNT(Ar.ArtworkID) > 3;
 
 -- 9. Artworks by Spanish artists
+    
 SELECT Title FROM Artworks WHERE ArtistID IN (
     SELECT ArtistID FROM Artists WHERE Nationality = 'Spanish'
 );
 
 -- 10. Exhibitions featuring both van Gogh and da Vinci
+    
 SELECT E.Title
 FROM Exhibitions E
 JOIN ExhibitionArtworks EA ON E.ExhibitionID = EA.ExhibitionID
@@ -170,12 +169,14 @@ AND E.ExhibitionID IN (
 GROUP BY E.Title;
 
 -- 11. Artworks not in any exhibition
+    
 SELECT A.ArtworkID, A.Title
 FROM Artworks A
 LEFT JOIN ExhibitionArtworks EA ON A.ArtworkID = EA.ArtworkID
 WHERE EA.ExhibitionID IS NULL;
 
 -- 12. Artists with artworks in all categories
+    
 SELECT A.Name
 FROM Artists A
 JOIN Artworks Ar ON A.ArtistID = Ar.ArtistID
@@ -183,19 +184,22 @@ GROUP BY A.ArtistID, A.Name
 HAVING COUNT(DISTINCT Ar.CategoryID) = (SELECT COUNT(*) FROM Categories);
 
 -- 13. Total number of artworks in each category
+    
 SELECT C.Name AS CategoryName, COUNT(A.ArtworkID) AS TotalArtworks
 FROM Categories C
 LEFT JOIN Artworks A ON C.CategoryID = A.CategoryID
 GROUP BY C.CategoryID, C.Name;
 
 -- 14. Artists with more than 2 artworks
+    
 SELECT A.Name
 FROM Artists A
 JOIN Artworks Ar ON A.ArtistID = Ar.ArtistID
 GROUP BY A.ArtistID, A.Name
 HAVING COUNT(*) > 2;
 
--- 15. Categories with average year of artworks (more than 1 artwork)
+-- 15. Categories with average year of artworks (more than 1 artwork) 
+    
 SELECT C.Name, AVG(A.Year) AS AvgYear
 FROM Categories C
 JOIN Artworks A ON C.CategoryID = A.CategoryID
@@ -203,6 +207,7 @@ GROUP BY C.CategoryID, C.Name
 HAVING COUNT(*) > 1;
 
 -- 16. Artworks in 'Modern Art Masterpieces'
+    
 SELECT A.Title
 FROM Artworks A
 JOIN ExhibitionArtworks EA ON A.ArtworkID = EA.ArtworkID
@@ -210,6 +215,7 @@ JOIN Exhibitions E ON EA.ExhibitionID = E.ExhibitionID
 WHERE E.Title = 'Modern Art Masterpieces';
 
 -- 17. Categories with avg year greater than overall avg
+    
 SELECT C.Name, AVG(A.Year) AS AvgYear
 FROM Categories C
 JOIN Artworks A ON C.CategoryID = A.CategoryID
@@ -217,12 +223,14 @@ GROUP BY C.CategoryID, C.Name
 HAVING AVG(A.Year) > (SELECT AVG(Year) FROM Artworks);
 
 -- 18. Artworks not exhibited
+    
 SELECT A.Title
 FROM Artworks A
 LEFT JOIN ExhibitionArtworks EA ON A.ArtworkID = EA.ArtworkID
 WHERE EA.ExhibitionID IS NULL;
 
 -- 19. Artists with artworks in same category as 'Mona Lisa'
+    
 SELECT DISTINCT A.Name
 FROM Artists A
 JOIN Artworks Ar ON A.ArtistID = Ar.ArtistID
@@ -231,6 +239,7 @@ WHERE Ar.CategoryID = (
 );
 
 -- 20. Artists and number of artworks
+    
 SELECT A.Name, COUNT(Ar.ArtworkID) AS ArtworkCount
 FROM Artists A
 JOIN Artworks Ar ON A.ArtistID = Ar.ArtistID
